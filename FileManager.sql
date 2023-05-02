@@ -11,10 +11,10 @@ CREATE TABLE user_info(
     firstname VARCHAR(100) NOT NULL,
     middlename VARCHAR(100) NOT NULL,
     lastname VARCHAR(100) NOT NULL,
-    user_image BLOB NOT NULL,
     user_email VARCHAR(100) NOT NULL UNIQUE KEY,
     user_mobile VARCHAR(100) NOT NULL UNIQUE KEY,
     user_dob date NOT NULL,
+    user_image BLOB
 );
 
 -- CREATE TABLE sanket(
