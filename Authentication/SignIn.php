@@ -13,17 +13,17 @@ if (isset($_POST['submit'])) {
 
         $result = mysqli_query($con, $check_password);
         $row = mysqli_fetch_array($result);
-        
+
         if ($row['password'] == $_POST['signin_password']) {
             $_SESSION['username'] = $_POST['signin_username'];
             header("Location:http://localhost/File%20Manager%20(PHP)/User/HomePage.php");
             exit();
         } else {
-            header("Location:http://localhost/File%20Manager%20(PHP)/Authentication/SignIn.php?error=Password Is Invalid");
+            header("Location:http://localhost/File%20Manager%20(PHP)/Authentication/SignIn.php?message=Password Is Invalid");
             exit();
         }
     } else {
-        header("Location:http://localhost/File%20Manager%20(PHP)/Authentication/SignIn.php?error=Username Does Not Exist");
+        header("Location:http://localhost/File%20Manager%20(PHP)/Authentication/SignIn.php?message=Username Does Not Exist");
         exit();
     }
 }
@@ -44,31 +44,49 @@ if (isset($_POST['submit'])) {
         crossorigin="anonymous"></script>
 </head>
 
-<body>
-    <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const myParam = urlParams.get('error');
-        if(myParam){
-            alert(myParam);
-        }
-    </script>
+<body>    
     <div class="container">
         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" class="mx-5" method="post">
             <h1 class="my-3">Sign In</h1>
             <div class="mb-3">
                 <label for="signin_username" class="form-label">Username</label>
-                <input type="text" class="form-control" id="signin_username" name="signin_username" placeholder="Enter Username">
+                <input type="text" class="form-control" id="signin_username" name="signin_username"
+                    placeholder="Enter Username">
             </div>
             <div class="mb-3">
                 <label for="signin_password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="signin_password"name="signin_password" placeholder="Enter Password">
+                <input type="password" class="form-control" id="signin_password" name="signin_password"
+                    placeholder="Enter Password">
             </div>
-            
+
             <input type="submit" class="btn btn-dark px-5 py-2" name="submit" value="Sign In">
-            <br/>
-            <a href="./ForgotPwd.html">Forgot Password?</a>
+            <br />
+            <a href="./ForgotPwd.php">Forgot Password?</a>
         </form>
     </div>
+
+    <div class="d-flex justify-content-center">
+        <div class="position-fixed top-50" style="">
+            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <strong id="toast-header-text" class="me-auto text-dark px-2 py-2" style="font-size: 20px;"></strong>
+                    <button type="button" class="btn-close px-3 py-2" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var toastLiveExample = document.getElementById('liveToast')
+        const urlParams = new URLSearchParams(window.location.search);
+        const myParam = urlParams.get('message');
+        if (myParam) {
+            var toastBody = document.getElementById('toast-header-text');
+            toastBody.innerHTML = myParam;
+            var toast = new bootstrap.Toast(toastLiveExample)
+            toast.show()
+        }
+    </script>
 </body>
 
 </html>

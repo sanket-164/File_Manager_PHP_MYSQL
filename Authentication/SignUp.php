@@ -6,21 +6,21 @@ if (isset($_POST['submit'])) {
 
     $result = mysqli_query($con, $check_username);
     if (mysqli_fetch_array($result)) {
-        header("Location:http://localhost/File%20Manager%20(PHP)/Authentication/SignUp.php?error=Username Already Exist");
+        header("Location:http://localhost/File%20Manager%20(PHP)/Authentication/SignUp.php?message=Username Already Exist");
         exit();
     } else {
         $check_email = "SELECT user_email FROM user_info WHERE user_email='" . $_POST['signup_email'] . "';";
 
         $result = mysqli_query($con, $check_email);
         if (mysqli_fetch_array($result)) {
-            header("Location:http://localhost/File%20Manager%20(PHP)/Authentication/SignUp.php?error=Email is Already Registered");
+            header("Location:http://localhost/File%20Manager%20(PHP)/Authentication/SignUp.php?message=Email is Already Registered");
             exit();
         } else {
             $check_number = "SELECT user_mobile FROM user_info WHERE user_mobile='" . $_POST['signup_number'] . "';";
 
             $result = mysqli_query($con, $check_number);
             if (mysqli_fetch_array($result)) {
-                header("Location:http://localhost/File%20Manager%20(PHP)/Authentication/SignUp.php?error=Number is Already Registered");
+                header("Location:http://localhost/File%20Manager%20(PHP)/Authentication/SignUp.php?message=Number is Already Registered");
                 exit();
             } else {
                 if ($con) {
@@ -46,11 +46,11 @@ if (isset($_POST['submit'])) {
                             header("Location:http://localhost/File%20Manager%20(PHP)/Authentication/SignIn.php");
                             exit();
                         } else {
-                            header("Location:http://localhost/File%20Manager%20(PHP)/Authentication/SignUp.php?error=Some error occured");
+                            header("Location:http://localhost/File%20Manager%20(PHP)/Authentication/SignUp.php?message=Some message occured");
                             exit();
                         }
                     } else {
-                        header("Location:http://localhost/File%20Manager%20(PHP)/Authentication/SignUp.php?error=Some error occured");
+                        header("Location:http://localhost/File%20Manager%20(PHP)/Authentication/SignUp.php?message=Some message occured");
                         exit();
                     }
                 } else {
@@ -78,13 +78,7 @@ if (isset($_POST['submit'])) {
 </head>
 
 <body>
-    <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const myParam = urlParams.get('error');
-        if (myParam) {
-            alert(myParam);
-        }
-    </script>
+
     <div class="container" id="sinup_container">
         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" id="sinup_form" class="mx-5" method="post">
             <h1 class="my-3">Sign Up</h1>
@@ -123,6 +117,29 @@ if (isset($_POST['submit'])) {
             </div>
         </form>
     </div>
+
+    <div class="d-flex justify-content-center">
+        <div class="position-fixed top-50" style="">
+            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <strong id="toast-header-text" class="me-auto text-dark px-2 py-2" style="font-size: 20px;"></strong>
+                    <button type="button" class="btn-close px-3 py-2" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var toastLiveExample = document.getElementById('liveToast')
+        const urlParams = new URLSearchParams(window.location.search);
+        const myParam = urlParams.get('message');
+        if (myParam) {
+            var toastBody = document.getElementById('toast-header-text');
+            toastBody.innerHTML = myParam;
+            var toast = new bootstrap.Toast(toastLiveExample)
+            toast.show()
+        }
+    </script>
 </body>
 
 </html>

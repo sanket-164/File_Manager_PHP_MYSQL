@@ -14,13 +14,14 @@ session_start();
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
-    <script src="../NavBar.js"></script>
+        <script src="./Javascript/NavBar.js"></script>
 </head>
 
 <body>
     <header-component></header-component>
+
     <div class="container d-flex justify-content-center">
-        <div class="card" style="width: 40rem; my-3">
+        <div class="card mt-4" style="width: 40rem; background-color: #f2f2f2;">
             <?php
             if (isset($_SESSION['username'])) {
 
@@ -64,3 +65,5 @@ session_start();
         </div>
     </div>
 </body>
+
+<html>

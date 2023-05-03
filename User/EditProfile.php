@@ -10,14 +10,14 @@ if (isset($_POST['editprofile_submit'])) {
 
         $result = mysqli_query($con, $check_email);
         if (mysqli_fetch_array($result)) {
-            header("Location:http://localhost/File%20Manager%20(PHP)/User/EditProfile.php?error=Email is Already Registered");
+            header("Location:http://localhost/File%20Manager%20(PHP)/User/EditProfile.php?message=Email is Already Registered");
             exit();
         } else {
             $check_number = "SELECT user_mobile FROM user_info WHERE user_mobile='" . $_POST['editprofile_mobile'] . "' && username!='" . $_SESSION['username'] . "';";
 
             $result = mysqli_query($con, $check_number);
             if (mysqli_fetch_array($result)) {
-                header("Location:http://localhost/File%20Manager%20(PHP)/User/EditProfile.php?error=Number is Already Registered");
+                header("Location:http://localhost/File%20Manager%20(PHP)/User/EditProfile.php?message=Number is Already Registered");
                 exit();
             } else {
 
@@ -26,7 +26,7 @@ if (isset($_POST['editprofile_submit'])) {
                     header("Location:http://localhost/File%20Manager%20(PHP)/User/Profile.php");
                     exit();
                 } else {
-                    header("Location:http://localhost/File%20Manager%20(PHP)/User/EditProfile.php?error=Some error occured");
+                    header("Location:http://localhost/File%20Manager%20(PHP)/User/EditProfile.php?message=Some message occured");
                     exit();
                 }
             }
@@ -49,14 +49,16 @@ if (isset($_POST['editprofile_submit'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
-    <script src="../NavBar.js"></script>
+    <script src="./Javascript/NavBar.js"></script>
 </head>
 
 <body>
+
     <header-component></header-component>
+    
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
         <div class="container d-flex justify-content-center">
-            <div class="card" style="width: 40rem; my-3">
+            <div class="card mt-4" style="width: 40rem; background-color: #f2f2f2;">
                 <?php
                 if (isset($_SESSION['username'])) {
 
@@ -102,4 +104,29 @@ if (isset($_POST['editprofile_submit'])) {
             </div>
         </div>
     </form>
+
+    <div class="d-flex justify-content-center">
+        <div class="position-fixed top-50" style="">
+            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <strong id="toast-header-text" class="me-auto text-dark px-2 py-2" style="font-size: 20px;"></strong>
+                    <button type="button" class="btn-close px-3 py-2" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var toastLiveExample = document.getElementById('liveToast')
+        const urlParams = new URLSearchParams(window.location.search);
+        const myParam = urlParams.get('message');
+        if (myParam) {
+            var toastBody = document.getElementById('toast-header-text');
+            toastBody.innerHTML = myParam;
+            var toast = new bootstrap.Toast(toastLiveExample)
+            toast.show()
+        }
+    </script>
 </body>
+
+</html>
