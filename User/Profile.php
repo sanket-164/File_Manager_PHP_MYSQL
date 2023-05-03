@@ -19,17 +19,48 @@ session_start();
 
 <body>
     <header-component></header-component>
-    
     <div class="container d-flex justify-content-center">
-        <div class="card" style="width: 50rem; my-3">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                    card's
-                    content.</p>
-                <a href="#" class="btn btn-dark d-flex justify-content-center">Edit Profile</a>
-            </div>
+        <div class="card" style="width: 40rem; my-3">
+            <?php
+            if (isset($_SESSION['username'])) {
+
+                $con = mysqli_connect("localhost:3307", "root", "", "file_manager");
+                $get_user = "SELECT * FROM user_info WHERE username='" . $_SESSION['username'] . "';";
+
+                $result = mysqli_query($con, $get_user);
+                $row = mysqli_fetch_array($result);
+
+                if ($row) {
+                    echo '<img src="..." class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h3 class="card-title">'.$row['username'].'</h3>
+                            <table class="card-title" width="100%">
+                                <tr>
+                                    <th>Name</th>
+                                    <td>'.$row['name'].'</td>
+                                </tr>
+                                <tr>
+                                    <th>Email</th>
+                                    <td>'.$row['user_email'].'</td>
+                                </tr>
+                                <tr>
+                                    <th>Mobile No.</th>
+                                    <td>'.$row['user_mobile'].'</td>
+                                </tr>
+                                <tr>
+                                    <th>Birth Date</th>
+                                    <td>'.$row['user_dob'].'</td>
+                                </tr>
+                            </table>
+                            <a href="./EditProfile.php" class="btn btn-dark d-flex justify-content-center">Edit Profile</a>
+                        </div>';
+                }
+            } else {
+                header("Location:http://localhost/File%20Manager%20(PHP)/Authentication/SignIn.php");
+                exit();
+            }
+            ?>
+
         </div>
     </div>
 </body>

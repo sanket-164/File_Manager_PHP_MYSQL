@@ -19,6 +19,7 @@ session_start();
 
 <body>
     <header-component></header-component>
+
     <?php
     if (isset($_SESSION['username'])) {
 
@@ -28,5 +29,4 @@ session_start();
         exit();
     }
     ?>
-</body>
 </body>

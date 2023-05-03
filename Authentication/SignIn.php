@@ -13,7 +13,7 @@ if (isset($_POST['submit'])) {
 
         $result = mysqli_query($con, $check_password);
         $row = mysqli_fetch_array($result);
-        print_r($row);
+        
         if ($row['password'] == $_POST['signin_password']) {
             $_SESSION['username'] = $_POST['signin_username'];
             header("Location:http://localhost/File%20Manager%20(PHP)/User/HomePage.php");

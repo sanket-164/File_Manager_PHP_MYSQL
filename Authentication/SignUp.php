@@ -36,6 +36,8 @@ if (isset($_POST['submit'])) {
                     if (mysqli_query($con, $insert_user)) {
                         $create_table = "CREATE TABLE " . $_POST['signup_username'] . "(
                             file_name VARCHAR(255) NOT NULL,
+                            file_extension VARCHAR(20) NOT NULL,
+                            file_size INTEGER NOT NULL,
                             file_content BLOB NOT NULL,
                             upload_time datetime NOT NULL
                         );";

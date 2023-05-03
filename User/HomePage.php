@@ -1,5 +1,5 @@
 <?php
-    session_start();
+session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,4 +19,54 @@
 
 <body>
     <header-component></header-component>
+    <div class="container">
+
+        <div class="dropdown my-3" align="right">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                Select Extension
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li><a class="dropdown-item" href="./HomePage.php?extension=all">All</a></li>
+                <li><a class="dropdown-item" href="./HomePage.php?extension=pdf">PDFs</a></li>
+                <li><a class="dropdown-item" href="./HomePage.php?extension=docx">DOCXs</a></li>
+                <li><a class="dropdown-item" href="./HomePage.php?extension=xlsx">XLSXs</a></li>
+            </ul>
+        </div>
+
+        <table class="table" style="border: 2px solid black;">
+            <thead>
+                <tr>
+                    <th scope="col">No.</th>
+                    <th scope="col">File Name</th>
+                    <th scope="col">Extension</th>
+                    <th scope="col">Size</th>
+                    <th scope="col">Download</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">1</th>
+                    <td>Mark</td>
+                    <td>pdf</td>
+                    <td>2bytes</td>
+                    <td>@mdo</td>
+                </tr>
+                <tr>
+                    <th scope="row">2</th>
+                    <td>Jacob</td>
+                    <td>docx</td>
+                    <td>5bytes</td>
+                    <td>Download</td>
+                </tr>
+                <tr>
+                    <th scope="row">3</th>
+                    <td>WNS_Sanket_P4.xlsx</td>
+                    <td>xlsx</td>
+                    <td>7 Bytes</td>
+                    <td>Download</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </body>
