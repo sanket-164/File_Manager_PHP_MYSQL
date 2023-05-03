@@ -15,9 +15,10 @@ CREATE TABLE user_info(
 );
 
 -- CREATE TABLE sanket(
+--     file_id INTEGER PRIMARY KEY AUTO_INCREMENT,
 --     file_name VARCHAR(255) NOT NULL,
---     file_extension VARCHAR(20) NOT NULL,
---     file_size INTEGER NOT NULL,
---     file_content BLOB NOT NULL,
---     upload_time datetime NOT NULL
+--     file_extension VARCHAR(20),
+--     file_size INTEGER,
+--     file_content BLOB,
+--     upload_time datetime
 -- );

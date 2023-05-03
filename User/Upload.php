@@ -17,8 +17,9 @@ if (isset($_POST['upload_submit'])) {
 
         if ($con) {
 
-            $sql = "INSERT INTO " . $_SESSION['username'] . "  VALUES ('" . $file_name . "','" . $file_extension . "','" . $file_size . "','" . mysqli_real_escape_string($con, $data) . "','" . $upload_time . "')";
-            if (mysqli_query($con, $sql)) {
+            $insert_file = "INSERT INTO " . $_SESSION['username'] . " (file_name, file_extension, file_size, file_content, upload_time) VALUES ('" . $file_name . "','" . $file_extension . "','" . $file_size . "','" . mysqli_real_escape_string($con, $data) . "','" . $upload_time . "')";
+           
+            if (mysqli_query($con, $insert_file)) {
                 header("Location:http://localhost/File%20Manager%20(PHP)/User/Upload.php?message=File Uploaded");
                 exit();
             } else {
@@ -28,6 +29,7 @@ if (isset($_POST['upload_submit'])) {
         }
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
