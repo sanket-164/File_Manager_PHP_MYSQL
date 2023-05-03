@@ -25,11 +25,12 @@ class Header extends HTMLElement {
                         <a class="nav-link" href="./Upload.php">Upload</a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link" href="#">Feedback</a>
+                        <a class="nav-link" href="./feedback.php">Feedback</a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link" href="#">About Us</a>
+                        <a class="nav-link" href="./aboutus.php">About Us</a>
                       </li>
+                      
                   </ul>
                   <form action="../Authentication/SignIn.php" method="get" class="d-flex">
                     <button class="btn btn-outline-secondary" type="submit">Logout</button>
