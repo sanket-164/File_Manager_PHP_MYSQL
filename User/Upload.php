@@ -1,6 +1,11 @@
 <?php
 session_start();
 
+if (!isset($_SESSION['username'])) {
+    header("Location:../Authentication/SignIn.php");
+    exit();
+}
+
 if (isset($_POST['upload_submit'])) {
 
     if (isset($_FILES["file"]) && $_FILES["file"]["error"] == UPLOAD_ERR_OK) {
@@ -18,12 +23,14 @@ if (isset($_POST['upload_submit'])) {
         if ($con) {
 
             $insert_file = "INSERT INTO " . $_SESSION['username'] . " (file_name, file_extension, file_size, file_content, upload_time) VALUES ('" . $file_name . "','" . $file_extension . "','" . $file_size . "','" . mysqli_real_escape_string($con, $data) . "','" . $upload_time . "')";
-           
+
             if (mysqli_query($con, $insert_file)) {
-                header("Location:http://localhost/File%20Manager%20(PHP)/User/Upload.php?message=File Uploaded");
+                $_SESSION['message'] = "File uploaded successfully";
+                header("Location:./Upload.php");
                 exit();
             } else {
-                header("Location:http://localhost/File%20Manager%20(PHP)/User/Uploaded.php?message=Can't Upload File");
+                $_SESSION['message'] = "Cannot upload file";
+                header("Location:./Uploaded.php");
                 exit();
             }
         }
@@ -65,12 +72,6 @@ if (isset($_POST['upload_submit'])) {
 
 <body>
     <header-component></header-component>
-    <?php
-    if (!isset($_SESSION['username'])) {
-        header("Location:http://localhost/File%20Manager%20(PHP)/Authentication/SignIn.php");
-        exit();
-    }
-    ?>
 
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" id="upload_form" class="mx-5" method="post"
         enctype="multipart/form-data">
@@ -93,28 +94,30 @@ if (isset($_POST['upload_submit'])) {
         </div>
     </form>
 
-    <div class="d-flex justify-content-center">
-        <div class="position-fixed top-50" style="">
-            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-header">
-                    <strong id="toast-header-text" class="me-auto text-dark px-2 py-2" style="font-size: 20px;"></strong>
-                    <button type="button" class="btn-close px-3 py-2" data-bs-dismiss="toast" aria-label="Close"></button>
+    <?php
+    if (isset($_SESSION['message'])) {
+        echo '<div class="d-flex justify-content-center">
+                <div class="position-fixed top-50" style="">
+                    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header">
+                            <strong id="toast-header-text" class="me-auto text-dark px-2 py-2" style="font-size: 20px;"></strong>
+                            <button type="button" class="btn-close px-3 py-2" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
+            </div>';
 
-    <script>
-        var toastLiveExample = document.getElementById('liveToast')
-        const urlParams = new URLSearchParams(window.location.search);
-        const myParam = urlParams.get('message');
-        if (myParam) {
-            var toastBody = document.getElementById('toast-header-text');
-            toastBody.innerHTML = myParam;
-            var toast = new bootstrap.Toast(toastLiveExample)
-            toast.show()
-        }
-    </script>
+        echo "<script>
+                var toastLiveExample = document.getElementById('liveToast')
+                var toastBody = document.getElementById('toast-header-text');
+                toastBody.innerHTML = '" . $_SESSION['message'] . "';
+                var toast = new bootstrap.Toast(toastLiveExample)
+                toast.show()
+            </script>";
+
+        unset($_SESSION['message']);
+    }
+    ?>
 </body>
 
 </html>

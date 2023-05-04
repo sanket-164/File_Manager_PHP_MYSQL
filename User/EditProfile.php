@@ -1,6 +1,11 @@
 <?php
 session_start();
 
+if (!isset($_SESSION['username'])) {
+    header("Location:../Authentication/SignIn.php");
+    exit();
+}
+
 if (isset($_POST['editprofile_submit'])) {
     $con = mysqli_connect("localhost:3307", "root", "", "file_manager");
 
@@ -10,23 +15,27 @@ if (isset($_POST['editprofile_submit'])) {
 
         $result = mysqli_query($con, $check_email);
         if (mysqli_fetch_array($result)) {
-            header("Location:http://localhost/File%20Manager%20(PHP)/User/EditProfile.php?message=Email is Already Registered");
+            $_SESSION['message'] = "Email is already registered";
+            header("Location:./EditProfile.php");
             exit();
         } else {
             $check_number = "SELECT user_mobile FROM user_info WHERE user_mobile='" . $_POST['editprofile_mobile'] . "' && username!='" . $_SESSION['username'] . "';";
 
             $result = mysqli_query($con, $check_number);
             if (mysqli_fetch_array($result)) {
-                header("Location:http://localhost/File%20Manager%20(PHP)/User/EditProfile.php?message=Number is Already Registered");
+                $_SESSION['message'] = "Number is already registered";
+                header("Location:./EditProfile.php");
                 exit();
             } else {
 
                 $update_user = "UPDATE user_info SET name='" . $_POST['editprofile_name'] . "', user_email='" . $_POST['editprofile_email'] . "', user_mobile='" . $_POST['editprofile_mobile'] . "', user_dob='" . $_POST['editprofile_dob'] . "' WHERE username='" . $_SESSION['username'] . "';";
                 if (mysqli_query($con, $update_user)) {
-                    header("Location:http://localhost/File%20Manager%20(PHP)/User/Profile.php");
+                    $_SESSION['message'] = "Profile updated successfully";
+                    header("Location:./Profile.php");
                     exit();
                 } else {
-                    header("Location:http://localhost/File%20Manager%20(PHP)/User/EditProfile.php?message=Some message occured");
+                    $_SESSION['message'] = "Some message occured";
+                    header("Location:./EditProfile.php");
                     exit();
                 }
             }
@@ -55,21 +64,19 @@ if (isset($_POST['editprofile_submit'])) {
 <body>
 
     <header-component></header-component>
-    
+
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
         <div class="container d-flex justify-content-center">
             <div class="card mt-4" style="width: 40rem; background-color: #f2f2f2;">
                 <?php
-                if (isset($_SESSION['username'])) {
+                $con = mysqli_connect("localhost:3307", "root", "", "file_manager");
+                $get_user = "SELECT * FROM user_info WHERE username='" . $_SESSION['username'] . "';";
 
-                    $con = mysqli_connect("localhost:3307", "root", "", "file_manager");
-                    $get_user = "SELECT * FROM user_info WHERE username='" . $_SESSION['username'] . "';";
+                $result = mysqli_query($con, $get_user);
+                $row = mysqli_fetch_array($result);
 
-                    $result = mysqli_query($con, $get_user);
-                    $row = mysqli_fetch_array($result);
-
-                    if ($row) {
-                        echo '<img src="..." class="card-img-top" alt="...">
+                if ($row) {
+                    echo '<img src="..." class="card-img-top" alt="...">
                         <div class="card-body">
                             <h3 class="card-title">' . $row['username'] . '</h3>
                             <table width="100%">
@@ -94,10 +101,6 @@ if (isset($_POST['editprofile_submit'])) {
                                 </tr>
                             </table>
                         </div>';
-                    }
-                } else {
-                    header("Location:http://localhost/File%20Manager%20(PHP)/Authentication/SignIn.php");
-                    exit();
                 }
                 ?>
 
@@ -105,28 +108,30 @@ if (isset($_POST['editprofile_submit'])) {
         </div>
     </form>
 
-    <div class="d-flex justify-content-center">
-        <div class="position-fixed top-50" style="">
-            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-header">
-                    <strong id="toast-header-text" class="me-auto text-dark px-2 py-2" style="font-size: 20px;"></strong>
-                    <button type="button" class="btn-close px-3 py-2" data-bs-dismiss="toast" aria-label="Close"></button>
+    <?php
+    if (isset($_SESSION['message'])) {
+        echo '<div class="d-flex justify-content-center">
+                <div class="position-fixed top-50" style="">
+                    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header">
+                            <strong id="toast-header-text" class="me-auto text-dark px-2 py-2" style="font-size: 20px;"></strong>
+                            <button type="button" class="btn-close px-3 py-2" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
+            </div>';
 
-    <script>
-        var toastLiveExample = document.getElementById('liveToast')
-        const urlParams = new URLSearchParams(window.location.search);
-        const myParam = urlParams.get('message');
-        if (myParam) {
-            var toastBody = document.getElementById('toast-header-text');
-            toastBody.innerHTML = myParam;
-            var toast = new bootstrap.Toast(toastLiveExample)
-            toast.show()
-        }
-    </script>
+        echo "<script>
+                var toastLiveExample = document.getElementById('liveToast')
+                var toastBody = document.getElementById('toast-header-text');
+                toastBody.innerHTML = '" . $_SESSION['message'] . "';
+                var toast = new bootstrap.Toast(toastLiveExample)
+                toast.show()
+            </script>";
+
+        unset($_SESSION['message']);
+    }
+    ?>
 </body>
 
 </html>

@@ -14,6 +14,12 @@ CREATE TABLE user_info(
     user_image BLOB
 );
 
+CREATE TABLE feedback(
+    name VARCHAR(100) NOT NULL,
+    feedback VARCHAR(255) NOT NULL,
+    feedback_time DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
 -- CREATE TABLE sanket(
 --     file_id INTEGER PRIMARY KEY AUTO_INCREMENT,
 --     file_name VARCHAR(255) NOT NULL,

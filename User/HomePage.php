@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['username'])) {
-    header("Location:http://localhost/File%20Manager%20(PHP)/Authentication/SignIn.php");
+    header("Location:../Authentication/SignIn.php");
     exit();
 }
 
@@ -26,7 +26,7 @@ if (isset($_GET['download_file'])) {
                 header('Content-Disposition: attachment; filename="' . $file_name . '"');
                 header('Content-Length: ' . $file_size);
                 readfile($file_content);
-
+                
             }
         } else {
             echo "<h1>no row found</h1>";
@@ -41,10 +41,12 @@ if (isset($_GET['delete_file'])) {
         $sql = "DELETE FROM " . $_SESSION['username'] . " WHERE file_id='" . $_GET['delete_file'] . "'";
 
         if (!mysqli_query($con, $sql)) {
-            header("Location:http://localhost/File%20Manager%20(PHP)/User/HomePage.php?message=Can't Delete File");
+            $_SESSION['message'] = "Cannot delete file";
+            header("Location:./HomePage.php");
             exit();
         } else {
-            header("Location:http://localhost/File%20Manager%20(PHP)/User/HomePage.php?message=File Deleted");
+            $_SESSION['message'] = "File deleted successfully";
+            header("Location:./HomePage.php?message=File Deleted");
             exit();
         }
     }
@@ -139,28 +141,30 @@ if (isset($_GET['delete_file'])) {
         </table>
     </div>
 
-    <div class="d-flex justify-content-center">
-        <div class="position-fixed top-50" style="">
-            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-header">
-                    <strong id="toast-header-text" class="me-auto text-dark px-2 py-2" style="font-size: 20px;"></strong>
-                    <button type="button" class="btn-close px-3 py-2" data-bs-dismiss="toast" aria-label="Close"></button>
+    <?php
+    if (isset($_SESSION['message'])) {
+        echo '<div class="d-flex justify-content-center">
+                <div class="position-fixed top-50" style="">
+                    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header">
+                            <strong id="toast-header-text" class="me-auto text-dark px-2 py-2" style="font-size: 20px;"></strong>
+                            <button type="button" class="btn-close px-3 py-2" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
+            </div>';
 
-    <script>
-        var toastLiveExample = document.getElementById('liveToast')
-        const urlParams = new URLSearchParams(window.location.search);
-        const myParam = urlParams.get('message');
-        if (myParam) {
-            var toastBody = document.getElementById('toast-header-text');
-            toastBody.innerHTML = myParam;
-            var toast = new bootstrap.Toast(toastLiveExample)
-            toast.show()
-        }
-    </script>
+        echo "<script>
+                var toastLiveExample = document.getElementById('liveToast')
+                var toastBody = document.getElementById('toast-header-text');
+                toastBody.innerHTML = '" . $_SESSION['message'] . "';
+                var toast = new bootstrap.Toast(toastLiveExample)
+                toast.show()
+            </script>";
+
+        unset($_SESSION['message']);
+    }
+    ?>
 </body>
 
 </html>

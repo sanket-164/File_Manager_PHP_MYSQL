@@ -20,10 +20,11 @@ session_start();
 <?php
 if (isset($_POST['verify_otp_submit'])) {
     if ($_POST['entered_otp'] == $_SESSION['otp']) {
-        header("Location:http://localhost/File%20Manager%20(PHP)/Authentication/ChangePwd.php");
+        header("Location:./ChangePwd.php");
         exit();
     } else {
-        header("Location:http://localhost/File%20Manager%20(PHP)/Authentication/ForgotPwd.php?message=Invalid OTP");
+        $_SESSION['message'] = "Invalid OTP";
+        header("Location:./ForgotPwd.php");
         exit();
     }
 } else if ($_SESSION['username']) {
@@ -37,10 +38,12 @@ if (isset($_POST['verify_otp_submit'])) {
                 $update_pwd = "UPDATE user_info SET password='" . $_POST['change_pwd'] . "' WHERE username='" . $_SESSION['username'] . "';";
 
                 if (mysqli_query($con, $update_pwd)) {
-                    header("Location:http://localhost/File%20Manager%20(PHP)/Authentication/SignIn.php");
+                    $_SESSION['message'] = "Password changed";
+                    header("Location:./SignIn.php");
                     exit();
                 } else {
-                    header("Location:http://localhost/File%20Manager%20(PHP)/Authentication/ChangePwd.php?message=Some message occured");
+                    $_SESSION['message'] = "Some Error Occurred";
+                    header("Location:./ChangePwd.php");
                     exit();
                 }
 
@@ -48,7 +51,8 @@ if (isset($_POST['verify_otp_submit'])) {
                 echo mysqli_connect_error();
             }
         } else {
-            header("Location:http://localhost/File%20Manager%20(PHP)/Authentication/ChangePwd.php?message=Password Doesn't Match");
+            $_SESSION['message'] = "Password Does not Match";
+            header("Location:./ChangePwd.php");
             exit();
         }
     } else {
@@ -74,7 +78,7 @@ if (isset($_POST['verify_otp_submit'])) {
         </div>';
     }
 } else {
-    header("Location:http://localhost/File%20Manager%20(PHP)/Authentication/SignIn.php");
+    header("Location:./SignIn.php");
     exit();
 }
 
@@ -82,30 +86,30 @@ if (isset($_POST['verify_otp_submit'])) {
 
 <body>
 
-    <div class="d-flex justify-content-center">
-        <div class="position-fixed top-50" style="">
-            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-header">
-                    <strong id="toast-header-text" class="me-auto text-dark px-2 py-2"
-                        style="font-size: 20px;"></strong>
-                    <button type="button" class="btn-close px-3 py-2" data-bs-dismiss="toast"
-                        aria-label="Close"></button>
+    <?php
+    if (isset($_SESSION['message'])) {
+        echo '<div class="d-flex justify-content-center">
+                <div class="position-fixed top-50" style="">
+                    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header">
+                            <strong id="toast-header-text" class="me-auto text-dark px-2 py-2" style="font-size: 20px;"></strong>
+                            <button type="button" class="btn-close px-3 py-2" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
+            </div>';
 
-    <script>
-        var toastLiveExample = document.getElementById('liveToast')
-        const urlParams = new URLSearchParams(window.location.search);
-        const myParam = urlParams.get('message');
-        if (myParam) {
-            var toastBody = document.getElementById('toast-header-text');
-            toastBody.innerHTML = myParam;
-            var toast = new bootstrap.Toast(toastLiveExample)
-            toast.show()
-        }
-    </script>
+        echo "<script>
+                var toastLiveExample = document.getElementById('liveToast')
+                var toastBody = document.getElementById('toast-header-text');
+                toastBody.innerHTML = '" . $_SESSION['message'] . "';
+                var toast = new bootstrap.Toast(toastLiveExample)
+                toast.show()
+            </script>";
+
+        unset($_SESSION['message']);
+    }
+    ?>
 </body>
 
 </html>

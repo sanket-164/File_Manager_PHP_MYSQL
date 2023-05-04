@@ -2,28 +2,31 @@
 session_start();
 
 if (isset($_POST['submit'])) {
-    $con = mysqli_connect("localhost", "root", "", "file_manager");
+    $con = mysqli_connect("localhost:3307", "root", "", "file_manager");
 
     $check_username = "SELECT username FROM user_info WHERE username='" . $_POST['signin_username'] . "';";
 
     $result = mysqli_query($con, $check_username);
     if (mysqli_fetch_array($result)) {
 
-        $check_password = "SELECT password FROM user_info WHERE username='" . $_POST['signin_username'] . "';";
+        $check_password = "SELECT name, password FROM user_info WHERE username='" . $_POST['signin_username'] . "';";
 
         $result = mysqli_query($con, $check_password);
         $row = mysqli_fetch_array($result);
 
         if ($row['password'] == $_POST['signin_password']) {
             $_SESSION['username'] = $_POST['signin_username'];
-            header("Location:http://localhost/File%20Manager%20(PHP)/User/HomePage.php");
+            $_SESSION['message'] = "Welcome ". $row['name'];
+            header("Location:../User/HomePage.php");
             exit();
         } else {
-            header("Location:http://localhost/File%20Manager%20(PHP)/Authentication/SignIn.php?message=Password Is Invalid");
+            $_SESSION['message'] = "Password Is Invalid";
+            header("Location:./SignIn.php");
             exit();
         }
     } else {
-        header("Location:http://localhost/File%20Manager%20(PHP)/Authentication/SignIn.php?message=Username Does Not Exist");
+        $_SESSION['message'] = "Username Does Not Exist";
+        header("Location:./SignIn.php");
         exit();
     }
 }
@@ -65,28 +68,30 @@ if (isset($_POST['submit'])) {
         </form>
     </div>
 
-    <div class="d-flex justify-content-center">
-        <div class="position-fixed top-50" style="">
-            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-header">
-                    <strong id="toast-header-text" class="me-auto text-dark px-2 py-2" style="font-size: 20px;"></strong>
-                    <button type="button" class="btn-close px-3 py-2" data-bs-dismiss="toast" aria-label="Close"></button>
+    <?php
+    if (isset($_SESSION['message'])) {
+        echo '<div class="d-flex justify-content-center">
+                <div class="position-fixed top-50" style="">
+                    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header">
+                            <strong id="toast-header-text" class="me-auto text-dark px-2 py-2" style="font-size: 20px;"></strong>
+                            <button type="button" class="btn-close px-3 py-2" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
+            </div>';
 
-    <script>
-        var toastLiveExample = document.getElementById('liveToast')
-        const urlParams = new URLSearchParams(window.location.search);
-        const myParam = urlParams.get('message');
-        if (myParam) {
-            var toastBody = document.getElementById('toast-header-text');
-            toastBody.innerHTML = myParam;
-            var toast = new bootstrap.Toast(toastLiveExample)
-            toast.show()
-        }
-    </script>
+        echo "<script>
+                var toastLiveExample = document.getElementById('liveToast')
+                var toastBody = document.getElementById('toast-header-text');
+                toastBody.innerHTML = '" . $_SESSION['message'] . "';
+                var toast = new bootstrap.Toast(toastLiveExample)
+                toast.show()
+            </script>";
+
+        unset($_SESSION['message']);
+    }
+    ?>
 </body>
 
 </html>
