@@ -42,12 +42,9 @@ if (isset($_GET['delete_file'])) {
 
         if (!mysqli_query($con, $sql)) {
             $_SESSION['message'] = "Cannot delete file";
-            header("Location:./HomePage.php");
             exit();
         } else {
             $_SESSION['message'] = "File deleted successfully";
-            header("Location:./HomePage.php?message=File Deleted");
-            exit();
         }
     }
 }

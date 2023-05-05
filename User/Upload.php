@@ -26,12 +26,8 @@ if (isset($_POST['upload_submit'])) {
 
             if (mysqli_query($con, $insert_file)) {
                 $_SESSION['message'] = "File uploaded successfully";
-                header("Location:./Upload.php");
-                exit();
             } else {
                 $_SESSION['message'] = "Cannot upload file";
-                header("Location:./Uploaded.php");
-                exit();
             }
         }
     }

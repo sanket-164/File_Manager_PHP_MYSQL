@@ -16,27 +16,40 @@ if (isset($_POST['editprofile_submit'])) {
         $result = mysqli_query($con, $check_email);
         if (mysqli_fetch_array($result)) {
             $_SESSION['message'] = "Email is already registered";
-            header("Location:./EditProfile.php");
-            exit();
         } else {
             $check_number = "SELECT user_mobile FROM user_info WHERE user_mobile='" . $_POST['editprofile_mobile'] . "' && username!='" . $_SESSION['username'] . "';";
 
             $result = mysqli_query($con, $check_number);
             if (mysqli_fetch_array($result)) {
                 $_SESSION['message'] = "Number is already registered";
-                header("Location:./EditProfile.php");
-                exit();
             } else {
 
                 $update_user = "UPDATE user_info SET name='" . $_POST['editprofile_name'] . "', user_email='" . $_POST['editprofile_email'] . "', user_mobile='" . $_POST['editprofile_mobile'] . "', user_dob='" . $_POST['editprofile_dob'] . "' WHERE username='" . $_SESSION['username'] . "';";
                 if (mysqli_query($con, $update_user)) {
-                    $_SESSION['message'] = "Profile updated successfully";
-                    header("Location:./Profile.php");
-                    exit();
+
+                    if (isset($_FILES["image"]) && $_FILES["image"]["error"] == UPLOAD_ERR_OK) {
+                        $fp = fopen($_FILES["image"]["tmp_name"], "rb");
+                        $data = fread($fp, filesize($_FILES["image"]["tmp_name"]));
+                        fclose($fp);
+
+                        $update_image = "UPDATE user_info SET user_image='" . mysqli_real_escape_string($con, $data) . "' WHERE username='" . $_SESSION['username'] . "'";
+                        
+                        if (mysqli_query($con, $update_image)) {
+                            $_SESSION['message'] = "Profile updated successfully";
+                            header("Location:./Profile.php");
+                            exit();
+                        } else {
+                            $_SESSION['message'] = "Cannot change image";
+                            header("Location:./Profile.php");
+                            exit();
+                        }
+                    } else {
+                        $_SESSION['message'] = "Profile updated successfully";
+                        header("Location:./Profile.php");
+                        exit();
+                    }
                 } else {
-                    $_SESSION['message'] = "Some message occured";
-                    header("Location:./EditProfile.php");
-                    exit();
+                    $_SESSION['message'] = "Some error occured";
                 }
             }
         }
@@ -52,7 +65,7 @@ if (isset($_POST['editprofile_submit'])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Edit Profile</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
@@ -65,7 +78,7 @@ if (isset($_POST['editprofile_submit'])) {
 
     <header-component></header-component>
 
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data">
         <div class="container d-flex justify-content-center">
             <div class="card mt-4" style="width: 40rem; background-color: #f2f2f2;">
                 <?php
@@ -76,13 +89,18 @@ if (isset($_POST['editprofile_submit'])) {
                 $row = mysqli_fetch_array($result);
 
                 if ($row) {
-                    echo '<img src="..." class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h3 class="card-title">' . $row['username'] . '</h3>
-                            <table width="100%">
+                    echo '<img src="' . "data:image/png;base64,". base64_encode($row['user_image']) . '" class="card-img-top" alt="'. $row['name'].'">
+                    <div class="card-body">
+                        <table width="100%">
+                                <tr align="center">
+                                    <td colspan="2"><input type="file" style="margin-left:8vw;" name="image"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"> <h3 class="card-title">' . $row['username'] . '</h3></td>
+                                </tr>
                                 <tr>
                                     <th>Name</th>
-                                    <td><input type="text" class="form-control" name="editprofile_name" value="' . $row['name'] . '" width="50%"></td>
+                                    <td><input type="text" class="form-control" name="editprofile_name" value="' . $row['name'] . '"></td>
                                 </tr>
                                 <tr>
                                     <th>Email</th>

@@ -19,10 +19,7 @@ session_start();
 
 <?php
 if (isset($_POST['verify_otp_submit'])) {
-    if ($_POST['entered_otp'] == $_SESSION['otp']) {
-        header("Location:./ChangePwd.php");
-        exit();
-    } else {
+    if (!$_POST['entered_otp'] == $_SESSION['otp']) {
         $_SESSION['message'] = "Invalid OTP";
         header("Location:./ForgotPwd.php");
         exit();
@@ -43,8 +40,6 @@ if (isset($_POST['verify_otp_submit'])) {
                     exit();
                 } else {
                     $_SESSION['message'] = "Some Error Occurred";
-                    header("Location:./ChangePwd.php");
-                    exit();
                 }
 
             } else {
@@ -52,12 +47,10 @@ if (isset($_POST['verify_otp_submit'])) {
             }
         } else {
             $_SESSION['message'] = "Password Does not Match";
-            header("Location:./ChangePwd.php");
-            exit();
         }
     } else {
-        echo '<div class="container">
-            <form action="' . $_SERVER['PHP_SELF'] . ' " class="mx-5" method="post">
+        echo '<div class="container"><div class="container d-flex justify-content-center align-items-center flex-column"  style="height: 100vh;">
+        <form action="' . $_SERVER['PHP_SELF'] . ' " class="mx-5 w-50 border p-4 border-2  border-dark " style="border-radius: 10px;"  method="post">
                 <h1 class="my-3">Change Password</h1>
                 <div class="mb-3">
                     <label for="change_pwd" class="form-label">New Password</label>

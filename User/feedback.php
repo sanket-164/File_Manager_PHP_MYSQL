@@ -1,19 +1,29 @@
 <?php
 session_start();
 
+if (!isset($_SESSION['username'])) {
+    header("Location:../Authentication/SignIn.php");
+    exit();
+}
+
 $con = mysqli_connect("localhost:3307", "root", "", "file_manager");
 if (isset($_POST['feedback_submit'])) {
   if ($con) {
-    $get_name = "SELECT name FROM user_info WHERE username=". $_SESSION['username'];
-    
-    $inFeedback = "INSERT INTO feedback VALUES ('" . $_POST['name'] . "',
-        '" . $_POST['feedback'] . "');";
+    $get_name = "SELECT name FROM user_info WHERE username='" . $_SESSION['username'] . "'";
 
-    $result = mysqli_query($con, $query);
-    if ($result) {
-      echo "added";
+    if ($result = mysqli_query($con, $get_name)) {
+      if ($row = mysqli_fetch_assoc($result)) {
+        
+        $inFeedback = "INSERT INTO feedback (name, feedback) VALUES ('" . $row['name'] . "','" . $_POST['feedback'] . "');";
+
+        if (mysqli_query($con, $inFeedback)) {
+          $_SESSION['message'] = "Thanks For Your Feedback";
+        } else {
+          $_SESSION['message'] = "Feedback did not submit";
+        }
+      }
     } else {
-      echo "not added";
+      $_SESSION['message'] = "Feedback did not submit";
     }
 
   } else {
@@ -47,13 +57,8 @@ if (isset($_POST['feedback_submit'])) {
 
     textarea {
       border-radius: 4px;
-      /* Rounded borders */
       box-sizing: border-box;
-      /* Make sure that padding and width stays in place */
       margin-top: 6px;
-      /* Add a top margin */
-      margin-bottom: 16px;
-      /* Bottom margin */
     }
 
     table {
@@ -82,11 +87,14 @@ if (isset($_POST['feedback_submit'])) {
     <br />
     <div class="feedback-container py-3">
       <form action="feedback.php" method="post">
-        <label for="feedback">Give feedback</label>
-        <textarea id="subject" class="m-3 container form-control" name="feedback" placeholder="Write something.."
-          style="height:200px" width="50%"></textarea>
+
+        <div class="d-flex flex-column">
+          <label for="feedback" class="mx-4" ><h2>Give feedback</h2></label>
+          <textarea id="subject" class="m-3" name="feedback" placeholder="Write something.."
+            style="height:200px;resize: none" width="50%"></textarea>
+        </div>
         <div class="d-flex justify-content-center">
-          <input type="submit" class="btn btn-dark px-4" name="feedback_submit" value="Submit">
+          <input type="submit" class="btn btn-dark px-4 my-3" name="feedback_submit" value="Submit">
         </div>
       </form>
 
@@ -95,21 +103,22 @@ if (isset($_POST['feedback_submit'])) {
 
       if ($con) {
         if ($result = mysqli_query($con, $get_feedbacks)) {
-          echo "<table border =1>
+          echo "<div class=\"d-flex\">
+                  <table class=\"m-3 \" border =1>
                       <tr>
                         <th>Name</th>    
-                        <th>Feedbacks</th>
+                        <th>Feedback</th>
                         <th>Time</th>
                       </tr>
               ";
           while ($row = mysqli_fetch_assoc($result)) {
             echo "<tr>
-              <td>" . $row["name"] . "</td>
-              <td>" . $row["feedback"] . "</td>
-              <td>" . $row["feedback_time"] . "</td>
-             </tr>";
+                  <td>" . $row["name"] . "</td>
+                  <td>" . $row["feedback"] . "</td>
+                  <td>" . $row["feedback_time"] . "</td>
+                </tr>";
           }
-          echo "</table>";
+          echo "</table></div>";
         }
       } else {
         echo mysqli_connect_error();
@@ -117,6 +126,31 @@ if (isset($_POST['feedback_submit'])) {
       ?>
     </div>
   </div>
+
+  <?php
+  if (isset($_SESSION['message'])) {
+    echo '<div class="d-flex justify-content-center">
+                <div class="position-fixed top-50" style="">
+                    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header">
+                            <strong id="toast-header-text" class="me-auto text-dark px-2 py-2" style="font-size: 20px;"></strong>
+                            <button type="button" class="btn-close px-3 py-2" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>';
+
+    echo "<script>
+                var toastLiveExample = document.getElementById('liveToast')
+                var toastBody = document.getElementById('toast-header-text');
+                toastBody.innerHTML = '" . $_SESSION['message'] . "';
+                var toast = new bootstrap.Toast(toastLiveExample)
+                toast.show()
+            </script>";
+
+    unset($_SESSION['message']);
+  }
+  ?>
 </body>
 
 </html>

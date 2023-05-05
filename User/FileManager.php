@@ -1,5 +1,10 @@
 <?php
 session_start();
+
+if (!isset($_SESSION['username'])){ 
+    header("Location:../Authentication/SignIn.php");
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,15 +25,6 @@ session_start();
 <body>
     <header-component></header-component>
 
-    <?php
-    if (isset($_SESSION['username'])) {
-
-
-    } else {
-        header("Location:http://localhost/File%20Manager%20(PHP)/Authentication/SignIn.php");
-        exit();
-    }
-    ?>
 </body>
 
 </html>

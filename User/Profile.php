@@ -27,7 +27,7 @@ if (!isset($_SESSION['username'])) {
     <header-component></header-component>
 
     <div class="container d-flex justify-content-center">
-        <div class="card mt-4" style="width: 40rem; background-color: #f2f2f2;">
+        <div class="card mt-4" style="width: 25rem; background-color: #f2f2f2;">
             <?php
 
             $con = mysqli_connect("localhost:3307", "root", "", "file_manager");
@@ -37,8 +37,10 @@ if (!isset($_SESSION['username'])) {
             $row = mysqli_fetch_array($result);
 
             if ($row) {
-                echo '<img src="..." class="card-img-top" alt="...">
-                        <div class="card-body">
+                echo '
+                <div class="d-flex justify-content-center">
+                <img src="' . "data:image/png;base64,". base64_encode($row['user_image']) . '" class="card-img-top" alt="' . $row['name'] .'" style="height:50vh;width:50vh;margin-top:1vw;">
+                        </div><div class="card-body">
                             <h3 class="card-title">' . $row['username'] . '</h3>
                             <table class="card-title" width="100%">
                                 <tr>

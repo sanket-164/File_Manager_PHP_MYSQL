@@ -42,7 +42,8 @@ if (isset($_POST['forgotpwd_submit'])) {
             $_SESSION['username'] = $_POST['forgotpwd_username'];
 
             echo '<div class="container">
-                    <form action="./ChangePwd.php" class="mx-5" method="post">
+            <div class="container d-flex justify-content-center align-items-center flex-column" style="height: 100vh;">
+                    <form action="./ChangePwd.php" class="mx-5 w-50 border p-4 border-2  border-dark " style="border-radius: 10px;" method="post">
                         <h1 class="my-3">Forgot Password</h1>
                         <div class="mb-3">
                             <label for="entered_otp" class="form-label">One Time Password (OTP)</label>
@@ -54,6 +55,7 @@ if (isset($_POST['forgotpwd_submit'])) {
                             <input type="submit" class="btn btn-dark px-5 py-2" name="verify_otp_submit" value="Verify">
                         </div>
                     </form>
+                    </div>
                 </div>
 
                 <div class="d-flex justify-content-center">
@@ -80,18 +82,16 @@ if (isset($_POST['forgotpwd_submit'])) {
             exit();
         } else {
             $_SESSION['message'] = "Can't send email";
-            header("Location:./ForgotPwd.php");
             exit();
         }
 
     } else {
         $_SESSION['message'] = "Username Does Not Exist";
-        header("Location:./ForgotPwd.php");
-        exit();
     }
 } else if (isset($_SESSION['message']) && $_SESSION['message'] == 'Invalid OTP') {
     echo '<div class="container">
-                    <form action="./ChangePwd.php" class="mx-5" method="post">
+    <div class="container d-flex justify-content-center align-items-center flex-column" style="height: 100vh;">
+                    <form action="./ChangePwd.php" class="mx-5 w-50 border p-4 border-2  border-dark " style="border-radius: 10px;" method="post">
                         <h1 class="my-3">Forgot Password</h1>
                         <div class="mb-3">
                             <label for="entered_otp" class="form-label">One Time Password (OTP)</label>
@@ -103,6 +103,7 @@ if (isset($_POST['forgotpwd_submit'])) {
                             <input type="submit" class="btn btn-dark px-5 py-2" name="verify_otp_submit" value="Verify">
                         </div>
                     </form>
+                    </div>
                 </div>
                 
                 <div class="d-flex justify-content-center">
@@ -128,7 +129,8 @@ if (isset($_POST['forgotpwd_submit'])) {
     exit();
 } else if (isset($_SESSION['message']) && $_SESSION['message'] != 'Invalid OTP') {
     echo '<div class="container">
-            <form action="' . $_SERVER['PHP_SELF'] . '" class="mx-5" method="post">
+    <div class="container d-flex justify-content-center align-items-center flex-column" style="height: 100vh;">
+            <form action="' . $_SERVER['PHP_SELF'] . '" class="mx-5 w-50 border p-4 border-2  border-dark " style="border-radius: 10px;" method="post">
                 <h1 class="my-3">Forgot Password</h1>
                 <div class="mb-3">
                     <label for="forgotpwd_username" class="form-label">Username</label>
@@ -140,9 +142,10 @@ if (isset($_POST['forgotpwd_submit'])) {
                     <input type="submit" class="btn btn-dark px-5 py-2" name="forgotpwd_submit" value="Send OTP to Email">
                 </div>
                 <div class="d-flex justify-content-center my-3">
-                    <a class="btn btn-dark" href="./SignIn.php">Sign In</a>
+                    <a class="btn btn-dark" href="./SignIn.php">Go back to Sign In</a>
                 </div>
             </form>
+            </div>
         </div>
             <div class="d-flex justify-content-center">
                 <div class="position-fixed top-50" style="">
@@ -171,23 +174,26 @@ if (isset($_POST['forgotpwd_submit'])) {
 <body>
 
     <div class="container">
-        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" class="mx-5" method="post">
-            <h1 class="my-3">Forgot Password</h1>
-            <div class="mb-3">
-                <label for="forgotpwd_username" class="form-label">Username</label>
-                <input type="text" class="form-control" id="forgotpwd_username" name="forgotpwd_username"
-                    placeholder="Enter Username">
-            </div>
+        <div class="container d-flex justify-content-center align-items-center flex-column" style="height: 100vh;">
+            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" class="mx-5 w-50 border p-4 border-2  border-dark " style="border-radius: 10px;" method="post">
+                <h1 class="my-3">Forgot Password</h1>
+                <div class="mb-3">
+                    <label for="forgotpwd_username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="forgotpwd_username" name="forgotpwd_username"
+                        placeholder="Enter Username">
+                </div>
 
-            <div class="d-flex justify-content-center">
-                <input type="submit" class="btn btn-dark px-5 py-2" name="forgotpwd_submit" value="Send OTP to Email">
-            </div>
-            <div class="d-flex justify-content-center my-3">
-                <a class="btn btn-dark" href="./SignIn.php">Sign In</a>
-            </div>
-        </form>
+                <div class="d-flex justify-content-center">
+                    <input type="submit" class="btn btn-dark px-5 py-2" name="forgotpwd_submit"
+                        value="Send OTP to Email">
+                </div>
+                <div class="d-flex justify-content-center my-3">
+                    <a class="btn btn-dark px-4" href="./SignIn.php">Go back to Sign In</a>
+                </div>
+            </form>
+        </div>
     </div>
-    
+
     <?php
     if (isset($_SESSION['message'])) {
         echo '<div class="d-flex justify-content-center">
