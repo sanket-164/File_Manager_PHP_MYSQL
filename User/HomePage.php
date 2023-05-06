@@ -106,14 +106,19 @@ if (isset($_GET['delete_file'])) {
             <tbody>
 
                 <?php
-                if (isset($_GET['extension'])) {
-                    if ($_GET['extension'] == 'all') {
-                        $get_files = "SELECT * FROM " . $_SESSION['username'] . ";";
+                if (isset($_SESSION['extension'])) {
+
+                    if(isset($_GET['extension'])) {
+                        $_SESSION['extension'] = $_GET['extension'];
+                    }
+
+                    if ($_SESSION['extension'] == 'all') {
+                        $get_files = "SELECT * FROM " . $_SESSION['username'] . " ORDER BY upload_time DESC;";
                     } else {
-                        $get_files = "SELECT * FROM " . $_SESSION['username'] . " WHERE file_extension = '" . $_GET['extension'] . "';";
+                        $get_files = "SELECT * FROM " . $_SESSION['username'] . " WHERE file_extension = '" . $_SESSION['extension'] . "' ORDER BY upload_time DESC;";
                     }
                 } else {
-                    $get_files = "SELECT * FROM " . $_SESSION['username'] . ";";
+                    $get_files = "SELECT * FROM " . $_SESSION['username'] . " ORDER BY upload_time DESC;";
                 }
 
                 if ($result = mysqlI_query($con, $get_files)) {

@@ -1,6 +1,9 @@
 <?php
 session_start();
 
+$con = mysqli_connect("localhost:3307", "root", "", "file_manager");
+
+
 if (!isset($_SESSION['username'])) {
     header("Location:../Authentication/SignIn.php");
     exit();
@@ -16,9 +19,6 @@ if (isset($_POST['upload_submit'])) {
         $file_size = $_FILES['file']['size'];
         $upload_time = date("Y-m-d h:i:sa");
         fclose($fp);
-
-
-        $con = mysqli_connect("localhost:3307", "root", "", "file_manager");
 
         if ($con) {
 
@@ -63,41 +63,104 @@ if (isset($_POST['upload_submit'])) {
             margin-left: 15%;
             display: inline-block;
         }
+
+        .file-container {
+            background-color: #f2f2f2;
+        }
+
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td,
+        th {
+            border: 1px solid #ccc;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
     </style>
 </head>
 
 <body>
     <header-component></header-component>
 
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" id="upload_form" class="mx-5" method="post"
-        enctype="multipart/form-data">
+    <div class="container">
+        <div class="file-container pb-1 mt-3">
+            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" id="upload_form" class="mx-5" method="post"
+                enctype="multipart/form-data">
 
-        <div id="maindiv">
-            <div class="d-flex justify-content-center">
-                <div id="label_div">
-                    <h3>Select File To Upload</h3>
+                <div id="maindiv">
+                    <div class="d-flex justify-content-center">
+                        <div id="label_div">
+                            <h3>Select File To Upload</h3>
+                        </div>
+                    </div>
+
+                    <div id="choose_file_div" class="d-flex justify-content-center my-3">
+                        <input type="file" id="file" name="file">
+                    </div>
+
+                    <div class="d-flex justify-content-center">
+                        <input type="submit" class="btn btn-dark px-5 py-2 my-2" name="upload_submit" value="Upload">
+                    </div>
+
                 </div>
-            </div>
-
-            <div id="choose_file_div" class="d-flex justify-content-center my-3">
-                <input type="file" id="file" name="file">
-            </div>
+            </form>
 
             <div class="d-flex justify-content-center">
-                <input type="submit" class="btn btn-dark px-5 py-2 my-2" name="upload_submit" value="Upload">
-            </div>
 
+                <table class="table" style="border: 2px solid black; width:75vw;">
+                    <thead>
+                        <tr>
+                            <th scope="col">No.</th>
+                            <th scope="col">File Name</th>
+                            <th scope="col">Extension</th>
+                            <th scope="col">Size</th>
+                            <th scope="col">Uploaded At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <?php
+                        $get_files = "SELECT * FROM " . $_SESSION['username'] . " ORDER BY upload_time DESC;";
+
+                        if ($result = mysqlI_query($con, $get_files)) {
+
+                            $counter = 1;
+
+                            while ($row = mysqli_fetch_assoc($result)) {
+                                echo '<tr>
+                    <th scope="row">' . $counter . '</th>
+                    <td>' . $row['file_name'] . '</td>
+                    <td>' . $row['file_extension'] . '</td>
+                    <td>' . $row['file_size'] . ' Bytes</td>
+                    <td>' . $row['upload_time'] . '</td>
+                </tr>';
+                                $counter += 1;
+                            }
+                        }
+                        ?>
+
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </form>
+    </div>
 
     <?php
     if (isset($_SESSION['message'])) {
         echo '<div class="d-flex justify-content-center">
                 <div class="position-fixed top-50" style="">
                     <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                        <div class="toast-header">
-                            <strong id="toast-header-text" class="me-auto text-dark px-2 py-2" style="font-size: 20px;"></strong>
-                            <button type="button" class="btn-close px-3 py-2" data-bs-dismiss="toast" aria-label="Close"></button>
+                    <div class="toast-header">
+                    <strong id="toast-header-text" class="me-auto text-dark px-2 py-2" style="font-size: 20px;"></strong>
+                    <button type="button" class="btn-close px-3 py-2" data-bs-dismiss="toast" aria-label="Close"></button>
                         </div>
                     </div>
                 </div>

@@ -84,12 +84,11 @@ if (isset($_POST['feedback_submit'])) {
 
   <header-component></header-component>
   <div class="container">
-    <br />
-    <div class="feedback-container py-3">
+    <div class="feedback-container py-2 mt-3">
       <form action="feedback.php" method="post">
 
         <div class="d-flex flex-column">
-          <label for="feedback" class="mx-4" ><h2>Give feedback</h2></label>
+          <label for="feedback" class="mx-4" ><h2>Give Feedback</h2></label>
           <textarea id="subject" class="m-3" name="feedback" placeholder="Write something.."
             style="height:200px;resize: none" width="50%"></textarea>
         </div>
@@ -99,7 +98,7 @@ if (isset($_POST['feedback_submit'])) {
       </form>
 
       <?php
-      $get_feedbacks = "SELECT * FROM feedback";
+      $get_feedbacks = "SELECT * FROM feedback ORDER BY feedback_time DESC LIMIT 10";
 
       if ($con) {
         if ($result = mysqli_query($con, $get_feedbacks)) {
