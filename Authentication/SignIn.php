@@ -2,8 +2,9 @@
 
 session_start();
 
+include("../Database.php");
+
 if (isset($_POST['submit'])) {
-    $con = mysqli_connect("localhost:3307", "root", "", "file_manager");
 
     $check_username = "SELECT username FROM user_info WHERE username='" . $_POST['signin_username'] . "';";
 
@@ -18,7 +19,7 @@ if (isset($_POST['submit'])) {
         if ($row['password'] == md5($_POST['signin_password'])) {
             $_SESSION['username'] = $_POST['signin_username'];
             $_SESSION['message'] = "Welcome ". $row['name'];
-            header("Location:../User/HomePage.php");
+            header("Location:../User/FileManager.php");
             exit();
         } else {
             $_SESSION['message'] = "Password Is Invalid";
@@ -63,7 +64,7 @@ if (isset($_POST['submit'])) {
                 <input type="submit" class="btn btn-dark px-5 py-2" name="submit" value="Sign In">
             </div>
             <div class="d-flex justify-content-center">
-                <a class="btn btn-dark px-4 my-3" href="./SignUp.php">Don't have an Account?</a>
+                <a class="btn btn-dark px-4 my-2" href="./SignUp.php">New Here?</a>
             </div>
             <div class="d-flex justify-content-center">
                 <a href="./ForgotPwd.php">Forgot Password?</a>

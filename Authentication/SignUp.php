@@ -1,8 +1,9 @@
 <?php
 session_start();
 
+include("../Database.php");
+
 if (isset($_POST['submit'])) {
-    $con = mysqli_connect("localhost:3307", "root", "", "file_manager");
 
     $check_username = "SELECT username FROM user_info WHERE username='" . $_POST['signup_username'] . "';";
 

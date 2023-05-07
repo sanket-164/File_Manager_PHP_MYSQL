@@ -9,6 +9,8 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
+include("../Database.php");
+
 if (isset($_POST['upload_submit'])) {
 
     if (isset($_FILES["file"]) && $_FILES["file"]["error"] == UPLOAD_ERR_OK) {

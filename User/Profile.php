@@ -6,6 +6,7 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
+include("../Database.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,7 +31,6 @@ if (!isset($_SESSION['username'])) {
         <div class="card mt-4" style="width: 25rem; background-color: #f2f2f2;">
             <?php
 
-            $con = mysqli_connect("localhost:3307", "root", "", "file_manager");
             $get_user = "SELECT * FROM user_info WHERE username='" . $_SESSION['username'] . "';";
 
             $result = mysqli_query($con, $get_user);
@@ -38,9 +38,14 @@ if (!isset($_SESSION['username'])) {
 
             if ($row) {
                 echo '
-                <div class="d-flex justify-content-center">
-                <img src="' . "data:image/png;base64,". base64_encode($row['user_image']) . '" class="card-img-top" alt="' . $row['name'] .'" style="height:50vh;width:50vh;margin-top:1vw;">
-                        </div><div class="card-body">
+                <div class="d-flex justify-content-center">';
+
+                if($row['user_image'] != null){
+                    echo'<img src="' . "data:image/png;base64,". base64_encode($row['user_image']) . '" class="card-img-top" alt="' . $row['name'] .'" style="height:50vh;width:50vh;margin-top:1vw;">';
+                } else {
+                    echo'<img src="../Images/Default_Profile.png" class="card-img-top" alt="' . $row['name'] .'" style="height:50vh;width:50vh;margin-top:1vw;">';
+                }
+                echo '</div><div class="card-body">
                             <h3 class="card-title">' . $row['username'] . '</h3>
                             <table class="card-title" width="100%">
                                 <tr>

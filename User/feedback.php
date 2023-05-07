@@ -6,7 +6,8 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
-$con = mysqli_connect("localhost:3307", "root", "", "file_manager");
+include("../Database.php");
+
 if (isset($_POST['feedback_submit'])) {
   if ($con) {
     $get_name = "SELECT name FROM user_info WHERE username='" . $_SESSION['username'] . "'";

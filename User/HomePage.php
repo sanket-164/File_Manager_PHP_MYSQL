@@ -5,34 +5,7 @@ if (!isset($_SESSION['username'])) {
     header("Location:../Authentication/SignIn.php");
     exit();
 }
-
-$con = mysqli_connect("localhost:3307", "root", "", "file_manager");
-
-if (isset($_GET['download_file'])) {
-
-    if ($con) {
-
-        $get_file = "SELECT file_name, file_size FROM " . $_SESSION['username'] . " WHERE file_id=" . $_GET['download_file'] . "";
-        
-        $result = mysqli_query($con, $get_file);
-        if (isset($result)) {
-
-            while ($row = mysqli_fetch_assoc($result)) {
-                $file_name = $row['file_name'];
-                $file_size = $row['file_size'];
-                $file_content = $row['file_content'];
-
-                header('Content-Type: application/octet-stream');
-                header('Content-Disposition: attachment; filename="' . $file_name . '"');
-                header('Content-Length: ' . $file_size);
-                readfile($file_content);
-                
-            }
-        } else {
-            echo "<h1>no row found</h1>";
-        }
-    }
-}
+include("../Database.php");
 
 if (isset($_GET['delete_file'])) {
 
@@ -106,19 +79,19 @@ if (isset($_GET['delete_file'])) {
             <tbody>
 
                 <?php
-                if (isset($_SESSION['extension'])) {
+                if (isset($_SESSION['extension']) || isset($_GET['extension'])) {
 
                     if(isset($_GET['extension'])) {
                         $_SESSION['extension'] = $_GET['extension'];
                     }
 
                     if ($_SESSION['extension'] == 'all') {
-                        $get_files = "SELECT * FROM " . $_SESSION['username'] . " ORDER BY upload_time DESC;";
+                        $get_files = "SELECT file_id, file_name, file_extension, file_size, upload_time FROM " . $_SESSION['username'] . " ORDER BY upload_time DESC;";
                     } else {
-                        $get_files = "SELECT * FROM " . $_SESSION['username'] . " WHERE file_extension = '" . $_SESSION['extension'] . "' ORDER BY upload_time DESC;";
+                        $get_files = "SELECT file_id, file_name, file_extension, file_size, upload_time FROM " . $_SESSION['username'] . " WHERE file_extension = '" . $_SESSION['extension'] . "' ORDER BY upload_time DESC;";
                     }
                 } else {
-                    $get_files = "SELECT * FROM " . $_SESSION['username'] . " ORDER BY upload_time DESC;";
+                    $get_files = "SELECT file_id, file_name, file_extension, file_size, upload_time FROM " . $_SESSION['username'] . " ORDER BY upload_time DESC;";
                 }
 
                 if ($result = mysqlI_query($con, $get_files)) {
@@ -132,7 +105,7 @@ if (isset($_GET['delete_file'])) {
                                     <td>' . $row['file_extension'] . '</td>
                                     <td>' . $row['file_size'] . ' Bytes</td>
                                     <td>' . $row['upload_time'] . '</td>
-                                    <td><a href="./HomePage.php?download_file=' . $row['file_id'] . '">Download</a></td>
+                                    <td><a href="./FileDownload.php?download_file=' . $row['file_id'] . '" target="__blank">Download</a></td>
                                     <td><a href="./HomePage.php?delete_file=' . $row['file_id'] . '">Delete</a></td>
                                 </tr>';
                         $counter += 1;

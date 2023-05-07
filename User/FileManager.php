@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['username'])){ 
+if (!isset($_SESSION['username'])) {
     header("Location:../Authentication/SignIn.php");
     exit();
 }
@@ -19,11 +19,26 @@ if (!isset($_SESSION['username'])){
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
-        <script src="./Javascript/NavBar.js"></script>
+    <script src="./Javascript/NavBar.js"></script>
 </head>
 
 <body>
     <header-component></header-component>
+
+    <div class="container d-flex justify-content-center mt-3">
+        <div class="card border border-dark col-md-4 text-dark">
+            <img class="" src="../Images/File_Manager_logo.png" class="card-img-top" alt="logo">
+            <div class="card-body bg-light ">
+                <h5 class="card-title">File Manager</h5>
+                <p class="card-text">This application provides an intuitive and
+                    user-friendly interface for uploading, organizing, and downloading files, and supports a range of
+                    file types, including documents, images, and more.</p>
+                <a class="btn btn-dark text-light" target="_blank"
+                    href="https://github.com/sanket-164/File_Manager_PHP_MYSQL">Get source code</a>
+                <a class="btn btn-dark text-light" href="HomePage.php">Continue</a>
+            </div>
+        </div>
+    </div>
 
 </body>
 

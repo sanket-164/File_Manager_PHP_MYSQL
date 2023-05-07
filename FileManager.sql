@@ -11,7 +11,7 @@ CREATE TABLE user_info(
     user_email VARCHAR(100) NOT NULL UNIQUE KEY,
     user_mobile VARCHAR(100) NOT NULL UNIQUE KEY,
     user_dob date NOT NULL,
-    user_image BLOB
+    user_image LONGBLOB
 );
 
 CREATE TABLE feedback(

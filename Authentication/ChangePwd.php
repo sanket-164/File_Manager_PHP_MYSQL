@@ -1,5 +1,7 @@
 <?php
 session_start();
+
+include("../Database.php");
 ?>
 
 <!DOCTYPE html>
@@ -18,8 +20,11 @@ session_start();
 </head>
 
 <?php
-if (isset($_POST['verify_otp_submit'])) {
-    if (!$_POST['entered_otp'] == $_SESSION['otp']) {
+if (isset($_POST['verify_otp_submit']) && isset($_SESSION['otp'])) {
+    if ($_POST['entered_otp'] == $_SESSION['otp']) {
+        header("Location:./ChangePwd.php");
+        exit();
+    } else {
         $_SESSION['message'] = "Invalid OTP";
         header("Location:./ForgotPwd.php");
         exit();
@@ -28,11 +33,10 @@ if (isset($_POST['verify_otp_submit'])) {
 
     if (isset($_POST['changepwd_submit'])) {
         if ($_POST['change_pwd'] == $_POST['confirm_pwd']) {
-            $con = mysqli_connect("localhost:3307", "root", "", "file_manager");
 
             if ($con) {
 
-                $update_pwd = "UPDATE user_info SET password='" . $_POST['change_pwd'] . "' WHERE username='" . $_SESSION['username'] . "';";
+                $update_pwd = "UPDATE user_info SET password='" . md5($_POST['change_pwd']) . "' WHERE username='" . $_SESSION['username'] . "';";
 
                 if (mysqli_query($con, $update_pwd)) {
                     $_SESSION['message'] = "Password changed";
@@ -40,6 +44,8 @@ if (isset($_POST['verify_otp_submit'])) {
                     exit();
                 } else {
                     $_SESSION['message'] = "Some Error Occurred";
+                    header("Location:./ChangePwd.php");
+                    exit();
                 }
 
             } else {
@@ -47,6 +53,8 @@ if (isset($_POST['verify_otp_submit'])) {
             }
         } else {
             $_SESSION['message'] = "Password Does not Match";
+            header("Location:./ChangePwd.php");
+            exit();
         }
     } else {
         echo '<div class="container"><div class="container d-flex justify-content-center align-items-center flex-column"  style="height: 100vh;">

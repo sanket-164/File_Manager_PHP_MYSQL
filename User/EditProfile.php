@@ -6,8 +6,9 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
+include("../Database.php");
+
 if (isset($_POST['editprofile_submit'])) {
-    $con = mysqli_connect("localhost:3307", "root", "", "file_manager");
 
     if ($con) {
 
@@ -82,15 +83,18 @@ if (isset($_POST['editprofile_submit'])) {
         <div class="container d-flex justify-content-center">
             <div class="card mt-4" style="width: 40rem; background-color: #f2f2f2;">
                 <?php
-                $con = mysqli_connect("localhost:3307", "root", "", "file_manager");
                 $get_user = "SELECT * FROM user_info WHERE username='" . $_SESSION['username'] . "';";
 
                 $result = mysqli_query($con, $get_user);
                 $row = mysqli_fetch_array($result);
 
                 if ($row) {
-                    echo '<img src="' . "data:image/png;base64,". base64_encode($row['user_image']) . '" class="card-img-top" alt="'. $row['name'].'">
-                    <div class="card-body">
+                    if($row['user_image'] != null){
+                        echo'<img src="' . "data:image/png;base64,". base64_encode($row['user_image']) . '" class="card-img-top" alt="' . $row['name'] .'"">';
+                    } else {
+                        echo'<img src="../Images/Default_Profile.png" class="card-img-top" alt="' . $row['name'] .'">';
+                    }
+                    echo '<div class="card-body">
                         <table width="100%">
                                 <tr align="center">
                                     <td colspan="2"><input type="file" style="margin-left:8vw;" name="image"></td>

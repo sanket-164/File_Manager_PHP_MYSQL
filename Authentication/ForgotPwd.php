@@ -1,5 +1,7 @@
 <?php
 session_start();
+
+include("../Database.php");
 ?>
 
 <!DOCTYPE html>
@@ -20,7 +22,6 @@ session_start();
 <?php
 
 if (isset($_POST['forgotpwd_submit'])) {
-    $con = mysqli_connect("localhost:3307", "root", "", "file_manager");
 
     $check_username = "SELECT user_email FROM user_info WHERE username='" . $_POST['forgotpwd_username'] . "';";
 
