@@ -141,7 +141,7 @@ if (isset($_POST['upload_submit'])) {
                     <th scope="row">' . $counter . '</th>
                     <td>' . $row['file_name'] . '</td>
                     <td>' . $row['file_extension'] . '</td>
-                    <td>' . $row['file_size'] . ' Bytes</td>
+                    <td>' . round(($row['file_size']/1024)) . ' KB</td>
                     <td>' . $row['upload_time'] . '</td>
                 </tr>';
                                 $counter += 1;
@@ -158,7 +158,7 @@ if (isset($_POST['upload_submit'])) {
     <?php
     if (isset($_SESSION['message'])) {
         echo '<div class="d-flex justify-content-center">
-                <div class="position-fixed top-50" style="">
+                <div class="position-fixed bottom-0 mb-4">
                     <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="toast-header">
                     <strong id="toast-header-text" class="me-auto text-dark px-2 py-2" style="font-size: 20px;"></strong>

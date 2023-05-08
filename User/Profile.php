@@ -41,9 +41,9 @@ include("../Database.php");
                 <div class="d-flex justify-content-center">';
 
                 if($row['user_image'] != null){
-                    echo'<img src="' . "data:image/png;base64,". base64_encode($row['user_image']) . '" class="card-img-top" alt="' . $row['name'] .'" style="height:50vh;width:50vh;margin-top:1vw;">';
+                    echo'<img src="' . "data:image/png;base64,". base64_encode($row['user_image']) . '" class="card-img-top p-3" alt="' . $row['name'] .'">';
                 } else {
-                    echo'<img src="../Images/Default_Profile.png" class="card-img-top" alt="' . $row['name'] .'" style="height:50vh;width:50vh;margin-top:1vw;">';
+                    echo'<img src="../Images/Default_Profile.png" class="card-img-top" alt="' . $row['name'] .'">';
                 }
                 echo '</div><div class="card-body">
                             <h3 class="card-title">' . $row['username'] . '</h3>
@@ -76,7 +76,7 @@ include("../Database.php");
     <?php
     if (isset($_SESSION['message'])) {
         echo '<div class="d-flex justify-content-center">
-                <div class="position-fixed top-50" style="">
+                <div class="position-fixed bottom-0 mb-4">
                     <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                         <div class="toast-header">
                             <strong id="toast-header-text" class="me-auto text-dark px-2 py-2" style="font-size: 20px;"></strong>
