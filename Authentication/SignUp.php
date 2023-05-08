@@ -25,7 +25,7 @@ if (isset($_POST['submit'])) {
             } else {
                 if ($con) {
 
-                    $insert_user = "INSERT INTO user_info VALUES ('" . $_POST['signup_username'] . "',
+                    $insert_user = "INSERT INTO user_info VALUES ('" . strToLower($_POST['signup_username']) . "',
                         '" . md5($_POST['signup_password']) . "',
                         '" . $_POST['signup_name'] . "',
                         '" . $_POST['signup_email'] . "',
@@ -102,7 +102,7 @@ if (isset($_POST['submit'])) {
                 <div class="mb-3">
                     <label for="signup_number" class="form-label">Mobile Number</label>
                     <input type="number" class="form-control" id="signup_number" name="signup_number"
-                        placeholder="Phone Number" required="true">
+                        placeholder="Phone Number" minlength="10" required="true">
                 </div>
                 <div class="mb-3">
                     <label for="signup_dob" class="form-label">Birthdate</label>
@@ -111,7 +111,7 @@ if (isset($_POST['submit'])) {
                 <div class="mb-3">
                     <label for="signup_password" class="form-label">Password</label>
                     <input type="password" class="form-control" id="signup_password" name="signup_password"
-                        placeholder="Enter Password" maxLength="15" minLength="5" required="true">
+                        placeholder="Enter Password" minLength="8" required="true">
                 </div>
                 <div class="d-flex justify-content-center w-full">
                     <input type="submit" class="btn btn-dark px-5 my-2" name="submit" value="Sign Up">
@@ -125,7 +125,7 @@ if (isset($_POST['submit'])) {
         <?php
         if (isset($_SESSION['message'])) {
             echo '<div class="d-flex justify-content-center">
-                <div class="position-fixed top-50" style="">
+                <div class="position-fixed bottom-0 mb-4">
                     <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                         <div class="toast-header">
                             <strong id="toast-header-text" class="me-auto text-dark px-2 py-2" style="font-size: 20px;"></strong>

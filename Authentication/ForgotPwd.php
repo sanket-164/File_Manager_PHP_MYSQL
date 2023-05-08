@@ -60,7 +60,7 @@ if (isset($_POST['forgotpwd_submit'])) {
                 </div>
 
                 <div class="d-flex justify-content-center">
-                    <div class="position-fixed top-50" style="">
+                    <div class="position-fixed bottom-0 mb-4">
                         <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                             <div class="toast-header">
                                 <strong id="toast-header-text" class="me-auto text-dark px-2 py-2" style="font-size: 20px;"></strong>
@@ -108,7 +108,7 @@ if (isset($_POST['forgotpwd_submit'])) {
                 </div>
                 
                 <div class="d-flex justify-content-center">
-                    <div class="position-fixed top-50" style="">
+                    <div class="position-fixed bottom-0 mb-4">
                         <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                             <div class="toast-header">
                                 <strong id="toast-header-text" class="me-auto text-dark px-2 py-2" style="font-size: 20px;"></strong>
@@ -149,7 +149,7 @@ if (isset($_POST['forgotpwd_submit'])) {
             </div>
         </div>
             <div class="d-flex justify-content-center">
-                <div class="position-fixed top-50" style="">
+                <div class="position-fixed bottom-0 mb-4">
                     <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                         <div class="toast-header">
                             <strong id="toast-header-text" class="me-auto text-dark px-2 py-2" style="font-size: 20px;"></strong>
@@ -198,7 +198,7 @@ if (isset($_POST['forgotpwd_submit'])) {
     <?php
     if (isset($_SESSION['message'])) {
         echo '<div class="d-flex justify-content-center">
-                <div class="position-fixed top-50" style="">
+                <div class="position-fixed bottom-0 mb-4">
                     <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                         <div class="toast-header">
                             <strong id="toast-header-text" class="me-auto text-dark px-2 py-2" style="font-size: 20px;"></strong>
