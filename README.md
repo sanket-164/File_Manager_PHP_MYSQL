@@ -2,7 +2,7 @@
 
 This is a web-based file management application built using PHP and MySQL. It provides users with a user-friendly interface to upload, download, and manage files within a web browser. The application is designed to facilitate efficient file handling and storage for individuals.
 
-## Features
+# Features
 
 ### User Authentication
 Users can create an account or log in to the application using their credentials. This ensures that only authorized users can access and manage files.
@@ -23,9 +23,9 @@ Users can easily delete files from their home page using the application's intui
 Users can search for specific files using keyword like file's extension or filters to quickly locate the desired files within the application. This saves time and effort in manually browsing through folders.
 
 ### Different Filetypes
-Users can easily upload files of different formats it supports wide range of files like pdf, dox, xlsx, zip, mp3 and many more... Using the application's interfac they can also download different type of files to their local system with a simple click.
+Users can easily upload files of different formats it supports wide range of files like pdf, dox, xlsx, zip, mp3 and many more... Using the application's interface they can also download different type of files to their local system with a simple click.
 
-## Installation
+# Installation
 1. Clone the repository or download the source code.
 
 2. Create a MySQL database and import the included SQL file to set up the necessary tables and schema.
